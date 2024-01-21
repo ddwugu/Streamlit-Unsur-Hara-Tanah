@@ -13,7 +13,7 @@ except Exception as e:
     kesuburan = None  # Assign None if there is an error loading the model
 
 # Web Title
-st.title('PREDIKSI UNSUR HARA, LOGAM, DAN PH TANAH')
+st.title('PREDIKSI UNSUR HARA, UNSUR LOGAM, DAN PH TANAH')
 
 # User Inputs
 Impedance = st.text_input('Input Nilai Impedansi Tanah (Ω)')
