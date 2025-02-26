@@ -57,9 +57,10 @@ if kesuburan is not None and st.button('⚡ Predict Soil Nutrients'):
             st.warning("⚠️ Please enter a valid Impedance value!")
         else:
             prediksi_unsur_hara = kesuburan.predict([[float(Impedance)]])
-
+            
             # Convert hasil prediksi ke DataFrame
-            column_names = ["Mg(%)", "Al(%)", "Si(%)", "Fe(%)", "S(%)", "Cl(%)", "K(%)", "Ca(%)", "Ti(%)", "Zn(%)", "Zr(%)", "Ni(%)", "Ga(%)", "Ta(%)", "V(%)", "Cr(%)", "Mn(%)", "c(%)", "p(%)", "N(%)", "pH(%)"]
+            column_names = ["Mg(%)", "Al(%)", "Si(%)", "Fe(%)", "S(%)", "Cl(%)", "K(%)", "Ca(%)", "Ti(%)", "Zn(%)", 
+                            "Zr(%)", "Ni(%)", "Ga(%)", "Ta(%)", "V(%)", "Cr(%)", "Mn(%)", "C(%)", "P(%)", "N(%)", "pH(%)"]
             df_prediksi = pd.DataFrame(prediksi_unsur_hara, columns=column_names)
 
             # Gabungkan dengan nilai Impedance yang dimasukkan user
@@ -71,18 +72,31 @@ if kesuburan is not None and st.button('⚡ Predict Soil Nutrients'):
 
             # ===================== VISUALISASI =====================
 
-            # Bar Chart
+            # Bar Chart dengan Label Rotasi
             st.markdown("### 📊 **Bar Chart of Soil Nutrients**")
-            st.bar_chart(result_df.set_index('Impedance(Ω)'))
+            fig, ax = plt.subplots(figsize=(10, 6))  # Lebih lebar agar tidak bertumpuk
+            df_prediksi.T.plot(kind="bar", legend=False, ax=ax, color='skyblue')
 
-            # Line Chart
+            ax.set_xticklabels(column_names, rotation=45, ha='right', fontsize=10)  # Rotasi label
+            ax.set_xlabel("Nutrient Type", fontsize=12)
+            ax.set_ylabel("Predicted Value (%)", fontsize=12)
+            ax.set_title("Soil Nutrient Prediction - Bar Chart", fontsize=14, fontweight="bold")
+            ax.grid(axis='y', linestyle='--', alpha=0.7)
+            st.pyplot(fig)
+
+            # Line Chart dengan Label Rotasi
             st.markdown("### 📈 **Line Chart of Soil Nutrients**")
-            fig, ax = plt.subplots(figsize=(8, 5))
+            fig, ax = plt.subplots(figsize=(10, 6))
             ax.plot(column_names, prediksi_unsur_hara[0], marker='o', linestyle='-', color='cyan', linewidth=2)
-            ax.set_xlabel("Nutrient Type")
-            ax.set_ylabel("Predicted Value (%)")
-            ax.set_title("Soil Nutrient Prediction")
-            ax.grid(True)
+
+            ax.set_xticks(range(len(column_names)))  # Set posisi label
+            ax.set_xticklabels(column_names, rotation=45, ha='right', fontsize=10)  # Rotasi label
+
+            ax.set_xlabel("Nutrient Type", fontsize=12)
+            ax.set_ylabel("Predicted Value (%)", fontsize=12)
+            ax.set_title("Soil Nutrient Prediction - Line Chart", fontsize=14, fontweight="bold")
+            ax.grid(True, linestyle='--', alpha=0.7)
+
             st.pyplot(fig)
 
             # Kesimpulan hasil prediksi
