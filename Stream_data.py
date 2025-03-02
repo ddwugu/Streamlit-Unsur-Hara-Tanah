@@ -25,7 +25,7 @@ st.markdown("""
 # ===================== LOAD MODEL =====================
 
 try:
-    with open('Pred_RF_Impedansi.sav', 'rb') as file:
+    with open('Pred_RF1_Impedansi.sav', 'rb') as file:
         kesuburan = pickle.load(file)
 except Exception as e:
     st.error(f"⚠️ Error loading the model: {e}")
