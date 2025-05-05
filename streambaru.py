@@ -3,8 +3,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
-import datetime
 
 # ===================== CONFIGURASI APLIKASI =====================
 
@@ -27,20 +25,16 @@ st.markdown("""
 # ===================== LOAD MODEL =====================
 
 try:
-    with open('Pred_RF_Baru.sav', 'rb') as file:
+    with open('Pred_RF1_Baru.sav', 'rb') as file:
         kesuburan = pickle.load(file)
 except Exception as e:
     st.error(f"⚠️ Error loading the model: {e}")
-    kesuburan = None
+    kesuburan = None  # Assign None if there is an error loading the model
 
 # ===================== UI APLIKASI =====================
 
 # Web Title dengan Emoji & Warna
 st.markdown("<h1 style='text-align: center; color: white;'>🌱 PREDICTION OF SOIL NUTRIENTS, METALS, AND pH ⚡</h1>", unsafe_allow_html=True)
-
-# **Tambahkan Tanggal & Waktu**
-current_time = datetime.datetime.now().strftime("%A, %d %B %Y - %H:%M:%S")
-st.markdown(f"<h4 style='text-align: center; color: white;'>🕒 {current_time}</h4>", unsafe_allow_html=True)
 
 # Deskripsi Singkat
 st.markdown("""
@@ -89,39 +83,6 @@ if kesuburan is not None and st.button('⚡ Predict Soil Nutrients'):
             ax.set_ylabel("Predicted Value (%)")
             ax.set_title("Soil Nutrient Prediction")
             ax.grid(True)
-            st.pyplot(fig)
-
-            # ===================== RADAR CHART =====================
-
-            st.markdown("### 🕸 **Radar Chart of Soil Nutrients**")
-
-            # Ambil nilai prediksi untuk radar chart
-            values = prediksi_unsur_hara[0]
-            categories = column_names
-
-            # Pastikan radar chart menutup lingkaran
-            values = np.append(values, values[0])
-            categories.append(categories[0])
-
-            # Buat sudut untuk tiap sumbu di radar chart
-            angles = np.linspace(0, 2 * np.pi, len(categories), endpoint=False).tolist()
-
-            # Inisialisasi Radar Chart
-            fig, ax = plt.subplots(figsize=(7, 7), subplot_kw=dict(polar=True))
-
-            # Plot garis & area radar chart
-            ax.fill(angles, values, color="cyan", alpha=0.3)
-            ax.plot(angles, values, color="blue", linewidth=2)
-
-            # Set label kategori
-            ax.set_xticks(angles[:-1])
-            ax.set_xticklabels(categories[:-1], fontsize=10)
-
-            # Styling
-            ax.set_yticklabels([])
-            ax.set_title("Soil Nutrient Composition", fontsize=14, fontweight="bold")
-
-            # Tampilkan radar chart
             st.pyplot(fig)
 
             # Kesimpulan hasil prediksi
